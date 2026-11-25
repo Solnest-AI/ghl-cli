@@ -392,6 +392,28 @@ per key. Relay each line. Any key that did not come over cleanly gets made fresh
 (see the table). Tell the member the old folder is still there and they can delete it once
 setup is done.
 
+**1f. Turn on automatic updates (required, silent).** Run it every time, also when setup runs
+again. On Windows through the Bash tool (Git Bash), the Mac line works as it is.
+
+Mac:
+
+```bash
+cd ~/ghl-cli && PY=.venv/bin/python && { [ -x "$PY" ] || PY=.venv/Scripts/python.exe; } && "$PY" scripts/solnest_autoupdate.py register --name ghl-cli --folder "$PWD" --update 'G=.venv/bin/ghl; [ -x $G ] || G=.venv/Scripts/ghl.exe; $G update' --after 'G=.venv/bin/ghl; [ -x $G ] || G=.venv/Scripts/ghl.exe; bash setup.sh --no-prompt --auto-install && { $G skill install || true; }' --undo 'G=.venv/bin/ghl; [ -x $G ] || G=.venv/Scripts/ghl.exe; $G update --undo'
+```
+
+Windows:
+
+```powershell
+& "$env:USERPROFILE\ghl-cli\.venv\Scripts\python.exe" "$env:USERPROFILE\ghl-cli\scripts\solnest_autoupdate.py" register --name ghl-cli --folder "$env:USERPROFILE\ghl-cli" --update 'G=.venv/bin/ghl; [ -x $G ] || G=.venv/Scripts/ghl.exe; $G update' --after 'G=.venv/bin/ghl; [ -x $G ] || G=.venv/Scripts/ghl.exe; bash setup.sh --no-prompt --auto-install && { $G skill install || true; }' --undo 'G=.venv/bin/ghl; [ -x $G ] || G=.venv/Scripts/ghl.exe; $G update --undo'
+```
+
+**Expected output:** one line, `[autoupdate] ghl-cli will keep itself up to date (...)`. Relay it.
+Nothing else to tell the member. From now on the CLI keeps itself on the latest release with no
+one asking: once a day, in the background when Claude Code starts, it runs `ghl update` (which
+never touches `~/.ghl-cli` or `.env`), then setup (1c) and `ghl skill install`. If a new release
+fails setup, it puts the old version back by itself. It lives in `~/.solnest/`, outside the
+`ghl-cli` folder.
+
 **GATE:**
 
 Mac:
@@ -430,6 +452,7 @@ Must print `ghl, version 2.1.0` (or a newer number) and the same number from the
 | 1d: `update: GitHub has no published release of the GHL CLI yet` | Not a blocker. Carry on. |
 | 1d: `update: this folder is still linked to git` | Not a blocker. It's a developer's copy (see `GitHub: kept attached`). Carry on. |
 | 1d: any other `update:` line ending in `nothing was changed`, or saying it put the previous version back | Not a blocker. The folder is exactly as it was. Carry on with the gate. |
+| 1f: `no such folder` | The code is not in `~/ghl-cli`. Finish 1a to 1c first, then run 1f again. |
 | 1e: `CAN'T READ ... Nothing was moved.` | A blocked read, not an empty file. On a Mac, the old folder is probably under Desktop, Documents or Downloads: the member drags it into their home folder in Finder and you run 1e again with the new path. Or skip it, and Phases 2 and 3 make fresh keys. |
 | 1e: `That doesn't look like ... (it's empty)` | The file was readable and that value really isn't in it. Its phase (2 for the key, 3 for the token) makes it fresh. |
 | 1e: `... (it's N characters and not the right shape)` for the GHL key | The old copy used an older kind of key, not a Private Integration. Phase 2 makes a new one. |
@@ -864,7 +887,8 @@ Then tell them, in one short friendly paragraph:
   `.ghl-cli` (updates never touch those), and the skill.
 - What can expire: the workflow login token ends now and then (a password change does it, for
   example), and the GHL key stops if someone deletes or changes the Private Integration.
-- How to fix and update: just say "fix my GHL keys" or "update the GHL CLI" in any chat.
+- It updates itself: new releases install on their own, and their keys and settings stay. To
+  fix keys, or to update right now, just say "fix my GHL keys" or "update the GHL CLI" in any chat.
 - How to remove it: the README's "Removing it" section.
 - If firing wasn't tested, or Phase 3 or 4 was skipped, say so again plainly.
 - If Phase 0 found an older copy, it's still where it was. They can delete it now. If an older
@@ -880,7 +904,8 @@ Then tell them, in one short friendly paragraph:
 |---|---|
 | "fix my GHL keys", any 401 or 403, "unauthorized" | Run `ghl doctor`. It names the key that failed and why. Redo only that phase (Phase 2 for the GHL key, Phase 3 for the workflow token or location reach), then run `ghl doctor` again. |
 | Workflow commands fail with an auth error | The login token ended. Phase 3, then `ghl doctor`. |
-| "update the GHL CLI" | Run `ghl update` and relay its lines. Then `ghl skill install` so the skill matches. `ghl update --undo` puts the previous version back. |
+| "update the GHL CLI" | Updates normally install themselves (Phase 1, step 1f), so this is only for when they ask. Run `ghl update` and relay its lines. Then `ghl skill install` so the skill matches, then step 1f once more (it picks up a newer auto-updater). `ghl update --undo` puts the previous version back. |
+| "Is it updating itself?" | `~/ghl-cli/.venv/bin/python ~/.solnest/autoupdate.py status` (Windows: `.venv\Scripts\python.exe`). `pause` stops all automatic updates, `resume` turns them back on. |
 | `GHL changed something on its side` | Run `ghl update`. If it's already the latest, the fix comes in a later release. Only the workflow commands use the unofficial API, so everything else keeps working. |
 | `GHL is having trouble right now` | GHL's servers, not their setup. Try again in a few minutes. If it lasts, run `ghl update`. |
 | `ghl` not found, or the folder moved | Phase 1, step 1c (safe to rerun), then `ghl skill install`. |

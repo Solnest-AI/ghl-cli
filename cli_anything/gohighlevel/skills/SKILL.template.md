@@ -16,6 +16,20 @@ GHL="{{GHL}}"
 
 Setup instructions for this install live in `{{SETUP}}`.
 
+## Your own changes (read first, every time)
+
+Before anything else, read `~/.solnest/ghl-cli/my-instructions.md` if it exists and
+follow it. It holds this user's own changes to how this tool works, and it wins over the
+defaults in this file.
+
+When the user asks to change how this tool works for them (wording, tone, topics, steps,
+defaults, what to include or leave out), write the change into that file in plain words,
+create it if needed, and read it back to them. **Never edit this tool's own files for
+that**, and that includes this skill file. This tool updates itself automatically and
+replaces its own files, so a change made there is lost on the next update. Their keys and
+settings in `~/.ghl-cli` (`keys.env`, `config.json`) and any `.env` are never touched by an
+update either.
+
 ## Safety rules (not optional)
 
 1. **Never ask for a key, and never print one.** Do not read or print `~/.ghl-cli/keys.env` or `~/.ghl-cli/workflow-pass.json` (the saved one-hour Google pass). Keys go in only through `ghl keys paste` (see "Fix my GHL keys"). If you see a key in a file or in output, do not repeat it.
@@ -66,7 +80,7 @@ The workflow token (the browser session key) expires from time to time. When wor
 
 ### "Update the GHL CLI"
 
-Run `ghl update` (as `"$GHL" update`). It installs the newest release and keeps the old one so it can be reverted. `"$GHL" update --undo` goes back to the previous version. Add `--force` only if the user says the update is stuck and gives a plain yes. After an update, run `"$GHL" doctor`, then `"$GHL" skill install` to refresh this skill file.
+Updates normally install themselves (once a day, in the background), so this is only for when the user asks. Run `ghl update` (as `"$GHL" update`). It installs the newest release and keeps the old one so it can be reverted. `"$GHL" update --undo` goes back to the previous version. Add `--force` only if the user says the update is stuck and gives a plain yes. After an update, run `"$GHL" doctor`, then `"$GHL" skill install` to refresh this skill file, then step 1f of `{{SETUP}}` (Phase 1) once more. "Is it updating itself?": `~/.solnest/autoupdate.py status`, run with the Python next to `"$GHL"`; `pause` stops automatic updates and `resume` turns them back on.
 
 ### "Remove the GHL CLI"
 

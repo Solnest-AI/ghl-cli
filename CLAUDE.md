@@ -50,8 +50,12 @@ SETUP.md handles it (it renames the folder after a plain yes, and can move its k
 - **"Fix my GHL keys":** run `ghl doctor`. It names the key that failed and why. Redo only the
   `SETUP.md` phase for that key (Phase 2 for the GHL key, Phase 3 for the workflow token or a
   location reach problem), then run `ghl doctor` again.
-- **"Update the GHL CLI":** run `ghl update`. It downloads the latest release, keeps keys and
-  settings, and runs `ghl doctor` with the new code. `ghl update --undo` goes back one version.
-  Then run `ghl skill install` so the skill matches the new version.
+- **"Update the GHL CLI":** updates normally install themselves (SETUP.md Phase 1, step 1f), so
+  this is only for when the member asks. Run `ghl update`. It downloads the latest release, keeps
+  keys and settings, and runs `ghl doctor` with the new code. `ghl update --undo` goes back one
+  version. Then run `ghl skill install` so the skill matches the new version, then step 1f once
+  more (it picks up a newer auto-updater). "Is it updating itself?":
+  `~/ghl-cli/.venv/bin/python ~/.solnest/autoupdate.py status`; `pause` stops all automatic
+  updates and `resume` turns them back on.
 - **Building workflows and everything else:** the `ghl-cli` skill that Phase 5 installs covers
   it. If it is missing, run `ghl skill install`, then start a new chat.

@@ -132,8 +132,11 @@ Add `--help` to any command to see its options.
 
 - Say **"fix my GHL keys"**. Claude runs `ghl doctor`, which names the key that stopped working and
   why, and redoes just that step with you.
-- Say **"update the GHL CLI"**. Claude runs `ghl update`, which grabs the latest release and keeps
-  your keys and settings. Didn't like it? `ghl update --undo` goes back.
+- It updates itself. Once a day, when Claude Code starts, it quietly installs any new release and
+  keeps your keys and settings. Want it right now? Say **"update the GHL CLI"**. Claude runs
+  `ghl update`, which grabs the latest release. Didn't like it? `ghl update --undo` goes back.
+- Your own changes to how Claude uses the CLI go in `~/.solnest/ghl-cli/my-instructions.md`,
+  outside the code folder, so no update can wipe them. Just tell Claude what you want changed.
 
 ---
 

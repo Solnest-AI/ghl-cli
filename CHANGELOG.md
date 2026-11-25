@@ -3,6 +3,19 @@
 To update: say "update the GHL CLI" in Claude Code, or run `ghl update`. Your keys and settings
 are kept. `ghl update --undo` goes back one version.
 
+## 2.2.0 (2026-11-24)
+
+- **It updates itself.** Setup now turns on automatic updates. Once a day, when Claude Code
+  starts, the CLI quietly checks for a new release and installs it, with the same rules as
+  `ghl update`: your keys and settings in `~/.ghl-cli` are never touched. If a new release
+  doesn't set up cleanly, it puts the old version back by itself. Saying "update the GHL CLI"
+  still works any time.
+- **Your own changes are safe.** Ask Claude to change how it uses the CLI for you, and it saves
+  that in `~/.solnest/ghl-cli/my-instructions.md`, outside the code folder, so no update wipes it.
+
+After updating to this version, run setup once more (or just say "set up the GHL CLI") so the
+automatic updates turn on.
+
 ## 2.1.1 (2026-11-09)
 
 Two fixes found on a member's setup.
